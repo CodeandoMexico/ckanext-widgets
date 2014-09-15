@@ -19,47 +19,28 @@
     {{ _('Private') }}
   </span>
   {% endif %}
-
-  {% if pkg.organization.image_url %}
-  <img src="{{pkg.organization.image_url}}" class="logo-organization" />
-  {% endif %}
-
-  <h1>{{ _('Data and Resources') }}</h1>
-
- <div class="resources-wide">  
+  <h1>
+    {{ pkg.title or pkg.name }}
+    {% if pkg.state.startswith('draft') %}
+    [{{ _('Draft') }}]
+    {% endif %}
+  </h1>
   {% if c.pkg_notes_formatted %}
   <div class="notes embedded-content">
     {{ c.pkg_notes_formatted }}
   </div>
   {% endif %}
-  {% snippet "snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
 
-  </div>
+  {% snippet "snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
 
   {% snippet "snippets/tags.html", tags=pkg.tags %}
 
+  {% snippet "snippets/additional_info.html", pkg_dict=pkg %}
 
 
 </div>
-
 <div class="footer">
-  <div class="footer-text">
-    <h3 class="footer-conoce">{{_('Dataset')}}:</h3>
-    <p>
-    {{ pkg.title or pkg.name }}
-    {% if pkg.state.startswith('draft') %}
-    [{{ _('Draft') }}]
-    {% endif %}
-    </p>
-  </div>
-
-  <div class="footer-logo">
-    <a href="http://datamx.io">
-      <img src="/datamx.gif" class="img-footer" />
-    </a>
-  </div>
+  <img src="/datamx.gif" class="img-footer" />
 </div>
-
-
 </body>
 </html>
