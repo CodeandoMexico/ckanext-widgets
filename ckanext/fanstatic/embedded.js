@@ -18,25 +18,25 @@
 
 
 Id = function (element) {
-  return element;
+return element;
 }
 
 Bind = function (valueA, valueB) {
-  if (valueA == null) {
-    return null;
-  }
-  valueB(valueA);
+if (valueA == null) {
+return null;
+}
+valueB(valueA);
 }
 
 function fromJSONtoQuery (object) {
-    var base = "?"
-    var val = true;
-    for (var key in object) {
-       if (!val) base += "&";
-       val = false;
-       base += key + "=" + object[key];
-    }
-    //console.log(base);
+var base = "?"
+var val = true;
+for (var key in object) {
+        if (object[key] != "" && object[key] != null) {
+	  if (!val) base += "&";
+          val = false;
+          base += key + "=" + object[key]; }}
+    console.log(base);
     return base;
 }
 
@@ -74,7 +74,9 @@ function BuildURL(schema) {
     // TODO: Add support for build query with non specific arguments
     this.query = function (query){
 	if (query != undefined && query != null) {
-          inner.query = query; //setQuery(schema.query, query);
+          for (key in query) {
+            inner.query[key] = query[key]; //setQuery(schema.query, query);
+          }
 	}
         //console.log(inner.query);
         return inner.query;
@@ -105,6 +107,14 @@ function validateNumeric(n){
   return 0;
 }
 
+var checkBanner =  function () {
+        if (active("#large", "standard-preview-active") && $("#banner-value").is(':checked') )  {
+	  controller.query({'banner': true});
+        } else {
+	  controller.query({'banner': ''});
+        }
+        $(".code-embedded").text(controller.code());
+	}
 
 var active = function (element, str) {
    var _class = $(element).attr("class").split(/\s+/);
@@ -114,6 +124,33 @@ var active = function (element, str) {
    }
    return false;
 }
+
+var activeMini = function () {
+	$("#large").removeClass("standard-preview-active");
+	$("#mini").addClass("standard-preview-active");
+	controller.width(300);
+	controller.height(500);
+        controller.query({"widget_type": "narrow"});
+        checkBanner();
+        
+        $(".code-embedded").text(controller.code());
+        $("#height-widget").val(500);
+	$("#width-widget").val(300);
+}
+
+var activeLarge = function () {
+	$("#large").addClass("standard-preview-active");
+	$("#mini").removeClass("standard-preview-active");
+	controller.width(900);
+	controller.height(400);
+        controller.query({"widget_type": "wide"});
+        checkBanner();
+
+        $(".code-embedded").text(controller.code());
+        $("#height-widget").val(400);
+	$("#width-widget").val(900);
+}
+
 $(document).ready(function () {
 
   var widget = new BuildURL({
@@ -121,7 +158,8 @@ $(document).ready(function () {
     host: window.location.host,
     path: window.location.pathname + '/widget',
     query: {
-      widget_type: "wide"
+      widget_type: "narrow",
+      banner: ""
     },
     attr: {
       width: 600,
@@ -129,8 +167,8 @@ $(document).ready(function () {
     }
   });
 
-  var controller = widget;
-  //console.log("Inicio de interaccion para embebe el widget");
+  controller = widget;
+  console.log("Inicio de interaccion para embebe el widget");
 
 /*
  * Close del embedded widget
@@ -139,8 +177,18 @@ $(document).ready(function () {
  * - Modificar para permitir ligar acciones con Monads 
 */
     $(".toggle-widget").click(function () {
-        $(".main-widget").toggleClass("active-widget");
-        //console.log("Muestra/Oculta");
+        if ($(".main-widget").hasClass("active-widget")) {
+          $(".main-widget").show(200, easing="linear");
+          console.log("show");
+	} else {
+          $(".main-widget").hide(200, easing="linear");
+          console.log("hide");
+        }
+
+        console.log("Muestra/Oculta");
+	$(".main-widget").toggleClass("active-widget");
+
+        
     });
 
     // Limpieza de inputs
@@ -169,34 +217,21 @@ $(document).ready(function () {
 	});
     
     // Selecciona la opcion mini de la muestras por defecto
-    $("#mini").click( function () {
-	$("#large").removeClass("standard-preview-active");
-	$("#mini").addClass("standard-preview-active");
-	controller.width(300);
-	controller.height(500);
-        
-        $(".code-embedded").text(controller.code());
-        $("#height-widget").val(500);
-	$("#width-widget").val(300);
-	});
+    $("#mini").click(activeMini);
 
-    $("#large").click( function () {
-	$("#large").addClass("standard-preview-active");
-	$("#mini").removeClass("standard-preview-active");
-	controller.width(900);
-	controller.height(400);
+    $("#large").click(activeLarge);
 
-        $(".code-embedded").text(controller.code());
-        $("#height-widget").val(400);
-	$("#width-widget").val(900);
-	});
+    $("#banner-value").click(checkBanner);
  
       $("#visual").click(function(){
+        banner = controller.query()["banner"] != "" ? "&banner=true" : "";
           window.open(
 	window.location.pathname + 
 	"/test_widget?width=" + controller.width() +
     	"&height=" + controller.height() +
-    	"&widget_type=" + controller.query()["widget_type"] )
+    	"&widget_type=" + controller.query()["widget_type"] +
+        banner
+        )
 	});
  /*   $("#small").onClick(
 	function () {
@@ -208,7 +243,9 @@ $(document).ready(function () {
 /*  $(".style-widget").click(function(){
     $(".style-widget").toggleClass("active");
   })*/
-
+    
     $("#height-widget").val(400);
     $("#width-widget").val(900);
+    activeMini();
+    checkBanner();
 });
