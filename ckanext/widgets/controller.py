@@ -89,7 +89,7 @@ class WidgetsController(p.toolkit.BaseController):
         try:
             widget_type = query["widget_type"][0]
             if widget_type in widget_types:
-		widget_type = DEFAULT["widget_type"]
+              widget_type = query["widget_type"][0]
         except:
             widget_type = DEFAULT["widget_type"]
 
