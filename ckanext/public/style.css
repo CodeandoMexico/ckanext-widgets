@@ -1,3 +1,7 @@
+html, body {
+  height:100%;
+}
+
 body {
   margin: 0;
   font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -294,13 +298,16 @@ h3{
 
 .page-wrap{
   min-height: 100%;
-  margin-bottom: -90px;
+  height: 100%;
+  margin-bottom: -90px !important;
 }
+
 .page-wrap:after {
   content: "";
   display: block;
 }
-.footer-wrapper{
-  min-height: 100%;
-  margin-bottom: 90px;
+
+.footer, .page-wrap:after {
+  /* .push must be the same height as footer */
+  height: 90px;
 }
