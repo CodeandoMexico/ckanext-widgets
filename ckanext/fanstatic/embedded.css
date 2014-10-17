@@ -219,6 +219,12 @@ font-size: 10px;
   margin: 20px 0px 0px;
 }
 
+.banner-eg{
+  font-style:italic;
+  padding-top:1em;
+}
+
+
 
 @media  all and (max-width: 520px) {
 .main-widget {

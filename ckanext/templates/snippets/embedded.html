@@ -1,7 +1,7 @@
 <!--link rel="stylesheet" type="text/css" href="../../public/style.css"-->
 <!--link rel="stylesheet" type="text/css" href="../../public/embedded.css"-->
 <div class="main-widget active-widget">
-  <div class="head-widget"> 
+  <div class="head-widget">
     <h2>Configura tu widget</h2>
   </div>
   <div class="embedded">
@@ -30,9 +30,17 @@
         <div class="resize" id="custom-width"><p>Anchura</p> <input id="width-widget" type="numeric" value="900"></div>
       </form>
     </div>
+
     <div id="banner">
-	<p id="banner-msg">Imagen de fondo</p>
-  <input id="banner-value"  class="checkbox "type="checkbox"> </input>
+      <h3>Imagen de fondo</h3>
+      <p id="banner-msg">
+      Mostrar imagen en widget: <input id="banner-value"  class="checkbox "type="checkbox"> </input>
+      </p>
+      <p class="banner-eg">Agrega la URL a una imagen como metadato "dataset_image" <br />
+      y activa este checkbox para mostrar la imagen.</p>
+      <p class="banner-eg"> Ejemplo: <br />
+      Campo: dataset_image <br />
+      Valor: http://i.imgur.com/Q2K09Qs.jpg </p>
     </div>
     <div class="buttons">
       <a id="visual" class="button-widget-preview ">Visualizar</a>
